@@ -4,13 +4,15 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 public class Sorting
 {
     public static void main(String[] args) {
-        
+        //Generar los numeros e imprimirlos para demostrar que estan desordenados,
+        //luego ir a un menú donde se seleccione con que método se quiere ordenar y volver a imprimirlos una vez termine el sorting.
     }
 
     // Generar un archivo con cantidadNumeros números aleatorios
@@ -58,27 +60,42 @@ public class Sorting
         }
     }
 
-    public static void medidorSort(String nombreArchivo) {
-        // Medir el tiempo que toma ordenar un arreglo de números con un PROFILER
-    } 
-
+    // Ordenar el arreglo usando el algoritmo de Insertion Sort
     public static void insertionSort(int[] arreglo) {
-        // Ordenar el arreglo usando el algoritmo de Insertion Sort
+        
     }
 
-    public static void mergeSort(int[] arreglo) {
-        // Ordenar el arreglo usando el algoritmo de Merge Sort
+    // Ordenar el arreglo usando el algoritmo de Merge Sort
+    public static void mergeSort(int[] arreglo, int izq, int der) {
+        if (izq < der) {
+            int mitad = (izq + der) / 2;
+            mergeSort(arreglo, izq, mitad);
+            mergeSort(arreglo, mitad + 1, der);
+            merge(arreglo, izq, mitad, der);
+        }
     }
 
-    public static void quickSort(int[] arreglo) {
-        // Ordenar el arreglo usando el algoritmo de Quick Sort
+    public static void merge(int[] arreglo, int izq, int mitad, int der) {
+        int[] aux = Arrays.copyOfRange(arreglo, izq, der + 1);
+        int i = 0, j = mitad - izq + 1, k = izq;
+        while (i <= mitad - izq && j < aux.length) {
+            arreglo[k++] = (aux[i] <= aux[j]) ? aux[i++] : aux[j++];
+        }
+        while (i <= mitad - izq) arreglo[k++] = aux[i++];
     }
 
+    // Ordenar el arreglo usando el algoritmo de Quick Sort
+    public static void quickSort(int[] arreglo, int bajo, int alto) {
+        
+    }
+
+    // Ordenar el arreglo usando el algoritmo de Radix Sort
     public static void radixSort(int[] arreglo) {
-        // Ordenar el arreglo usando el algoritmo de Radix Sort
+
     }
 
-    public static void timSort(int[] arreglo) {
-        // Ordenar el arreglo usando el algoritmo de Tim Sort
+    // Ordenar el arreglo usando el algoritmo de Bucket Sort
+    public static void bucketSort(int[] arreglo) {
+
     }
 }
