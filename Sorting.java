@@ -1,6 +1,9 @@
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -10,8 +13,8 @@ public class Sorting
         
     }
 
+    // Generar un archivo con cantidadNumeros números aleatorios
     public static void generadorNumeros() {
-        // Generar un archivo con cantidadNumeros números aleatorios
         String nombreArchivo = "numeros.txt";
         int cantidadNumeros = 3000;
         Random random = new Random();
@@ -28,13 +31,31 @@ public class Sorting
         }
     }
 
+    //Leer los números de un archivo y devolverlos en un arreglo
     public static List<Integer> leerNumeros(String nombreArchivo) {
-        // Leer los números de un archivo y devolverlos en un arreglo
-        return null;
+        List<Integer> numeros = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(nombreArchivo))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                numeros.add(Integer.valueOf(linea));
+            }
+        }
+        catch (IOException e) {
+            System.out.println("Error al leer el archivo " + nombreArchivo);
+        }
+        return numeros;
     }
 
+    // Guardar los números en un archivo
     public static void guardarNumeros(String nombreArchivo, List<Integer> numeros) {
-        // Guardar los números en un archivo
+        try (FileWriter file = new FileWriter(nombreArchivo)) {
+            for (int numero : numeros) {
+                file.write(numero + "\n");
+            }
+        } 
+        catch (IOException e) {
+            System.out.println("Error al escribir en el archivo " + nombreArchivo);
+        }
     }
 
     public static void medidorSort(String nombreArchivo) {
