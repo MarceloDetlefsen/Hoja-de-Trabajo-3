@@ -1,6 +1,7 @@
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 
 public class Sorting
@@ -27,13 +28,17 @@ public class Sorting
         }
     }
 
-    public static int[] leerNumeros(String nombreArchivo) {
+    public static List<Integer> leerNumeros(String nombreArchivo) {
         // Leer los números de un archivo y devolverlos en un arreglo
         return null;
     }
 
+    public static void guardarNumeros(String nombreArchivo, List<Integer> numeros) {
+        // Guardar los números en un archivo
+    }
+
     public static void medidorSort(String nombreArchivo) {
-        // Medir el tiempo que toma ordenar un arreglo de números
+        // Medir el tiempo que toma ordenar un arreglo de números con un PROFILER
     } 
 
     public static void insertionSort(int[] arreglo) {
