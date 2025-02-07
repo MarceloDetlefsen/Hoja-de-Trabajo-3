@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -75,6 +76,7 @@ public class Sorting
         }
     }
 
+    //Método que fusiona los subarrays ordenadamente
     public static void merge(int[] arreglo, int izq, int mitad, int der) {
         int[] aux = Arrays.copyOfRange(arreglo, izq, der + 1);
         int i = 0, j = mitad - izq + 1, k = izq;
@@ -96,6 +98,15 @@ public class Sorting
 
     // Ordenar el arreglo usando el algoritmo de Bucket Sort
     public static void bucketSort(int[] arreglo) {
-
+        int max = Arrays.stream(arreglo).max().getAsInt();
+        int numBuckets = 10;
+        List<Integer>[] buckets = new List[numBuckets];
+        for (int i = 0; i < numBuckets; i++) buckets[i] = new ArrayList<>();
+        for (int num : arreglo) buckets[(num * numBuckets) / (max + 1)].add(num);
+        int idx = 0;
+        for (List<Integer> bucket : buckets) {
+            Collections.sort(bucket);
+            for (int num : bucket) arreglo[idx++] = num;
+        }
     }
 }
