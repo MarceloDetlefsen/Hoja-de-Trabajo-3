@@ -1,11 +1,30 @@
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Random;
+
 public class Sorting
 {
     public static void main(String[] args) {
         
     }
 
-    public static void generadorNumeros(String nombreArchivo, int cantidadNumeros) {
+    public static void generadorNumeros() {
         // Generar un archivo con cantidadNumeros números aleatorios
+        String nombreArchivo = "numeros.txt";
+        int cantidadNumeros = 3000;
+        Random random = new Random();
+
+        try (FileWriter file = new FileWriter(nombreArchivo)) {
+            for (int i = 0; i < cantidadNumeros; i++) {
+                int numero = random.nextInt(10000);
+                file.write(numero + "\n");
+            }
+            System.out.println("Se han generado " + cantidadNumeros + " números aleatorios en el archivo " + nombreArchivo);
+        } 
+        catch (IOException e) {
+            System.out.println("Error al escribir en el archivo " + nombreArchivo);
+        }
     }
 
     public static int[] leerNumeros(String nombreArchivo) {
