@@ -20,7 +20,7 @@ public class Sorting
         
         // Leer los números del archivo
         String archivo = "numeros.txt";
-        int[] numeros = leerNumeros(archivo);
+        Comparable[] numeros = leerNumeros(archivo);
         
         // Imprimir los números desordenados
         System.out.println("Números desordenados:");
@@ -40,6 +40,7 @@ public class Sorting
         switch (opcion) {
             case 1:
                 insertionSort(numeros);
+                break;
             case 2:
                 mergeSort(numeros, 0, numeros.length - 1);
                 break;
@@ -47,10 +48,16 @@ public class Sorting
                 quickSort(numeros, 0, numeros.length - 1);
                 break;
             case 4:
-                radixSort(numeros);
+                // Convertir Comparable[] a Integer[] para radixSort
+                Integer[] numerosInteger = Arrays.copyOf(numeros, numeros.length, Integer[].class);
+                radixSort(numerosInteger);
+                numeros = Arrays.copyOf(numerosInteger, numerosInteger.length, Comparable[].class);
                 break;
             case 5:
-                bucketSort(numeros);
+                // Convertir Comparable[] a Integer[] para bucketSort
+                Integer[] numerosInteger2 = Arrays.copyOf(numeros, numeros.length, Integer[].class);
+                bucketSort(numerosInteger2);
+                numeros = Arrays.copyOf(numerosInteger2, numerosInteger2.length, Comparable[].class);
                 break;
             default:
                 System.out.println("Opción no válida.");
@@ -91,7 +98,7 @@ public class Sorting
      * @param nombreArchivo
      * @return
      */
-    public static int[] leerNumeros(String nombreArchivo) {
+    public static Integer[] leerNumeros(String nombreArchivo) {
         List<Integer> numeros = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(nombreArchivo))) {
             String linea;
@@ -103,7 +110,7 @@ public class Sorting
             System.out.println("Error al leer el archivo " + nombreArchivo);
         }
 
-        int[] arreglo = new int[numeros.size()];
+        Integer[] arreglo = new Integer[numeros.size()];
         for (int i = 0; i < numeros.size(); i++) {
             arreglo[i] = numeros.get(i);
         }
@@ -115,9 +122,9 @@ public class Sorting
      * @param nombreArchivo
      * @param arreglo
      */
-    public static void guardarNumeros(String nombreArchivo, int[] arreglo) {
+    public static void guardarNumeros(String nombreArchivo, Comparable[] arreglo) {
         try (FileWriter file = new FileWriter(nombreArchivo)) {
-            for (int numero : arreglo) {
+            for (Comparable numero : arreglo) {
                 file.write(numero + "\n");
             }
         } catch (IOException e) {
@@ -129,11 +136,11 @@ public class Sorting
     /**
      * @param arreglo
      */
-    public static void insertionSort(int[] arreglo) {
+    public static void insertionSort(Comparable[] arreglo) {
         for (int i = 1; i <arreglo.length; i++){
-            int key = arreglo[i]; // La variable key toma el valor del elemento que se esta comparando
+            Comparable key = arreglo[i]; // La variable key toma el valor del elemento que se esta comparando
             int j = i - 1; // la variable j se usa para evaluar los elementos de la lista atras de Key
-            while (j >=0 && arreglo[j] > key){
+            while (j >= 0 && arreglo[j].compareTo(key) > 0){
                 arreglo[j + 1] = arreglo[j];
                 j--;
             }
@@ -147,7 +154,7 @@ public class Sorting
      * @param izq
      * @param der
      */
-    public static void mergeSort(int[] arreglo, int izq, int der) {
+    public static void mergeSort(Comparable[] arreglo, int izq, int der) {
         if (izq < der) {
             int mitad = (izq + der) / 2;
             mergeSort(arreglo, izq, mitad);
@@ -163,13 +170,27 @@ public class Sorting
      * @param mitad
      * @param der
      */
-    public static void merge(int[] arreglo, int izq, int mitad, int der) {
-        int[] aux = Arrays.copyOfRange(arreglo, izq, der + 1);
-        int i = 0, j = mitad - izq + 1, k = izq;
+    public static void merge(Comparable[] arreglo, int izq, int mitad, int der) {
+        // Copia los elementos del rango especificado en un arreglo auxiliar
+        Comparable[] aux = Arrays.copyOfRange(arreglo, izq, der + 1);
+    
+        int i = 0; // Índice para la primera mitad del arreglo auxiliar
+        int j = mitad - izq + 1; // Índice para la segunda mitad del arreglo auxiliar
+        int k = izq; // Índice para el arreglo original
+    
+        // Combina las dos mitades en el arreglo original
         while (i <= mitad - izq && j < aux.length) {
-            arreglo[k++] = (aux[i] <= aux[j]) ? aux[i++] : aux[j++];
+            if (aux[i].compareTo(aux[j]) <= 0) {
+                arreglo[k++] = aux[i++];
+            } else {
+                arreglo[k++] = aux[j++];
+            }
         }
-        while (i <= mitad - izq) arreglo[k++] = aux[i++];
+    
+        // Copia los elementos restantes de la primera mitad, si los hay
+        while (i <= mitad - izq) {
+            arreglo[k++] = aux[i++];
+        }
     }
 
     // Ordenar el arreglo usando el algoritmo de Quick Sort
@@ -178,7 +199,7 @@ public class Sorting
      * @param izq
      * @param der
      */
-    public static void quickSort(int[] arreglo, int izq, int der) {
+    public static void quickSort(Comparable[] arreglo, int izq, int der) {
         if (izq < der) {
             // Obtiene el índice del pivote
             int pivote = particion(arreglo, izq, der);
@@ -194,15 +215,15 @@ public class Sorting
      * @param der
      * @return
      */
-    public static int particion(int[] arreglo, int izq, int der) {
+    public static int particion(Comparable[] arreglo, int izq, int der) {
         // Selecciona el último elemento como pivote
-        int pivote = arreglo[der];
+        Comparable pivote = arreglo[der];
         int i = izq - 1; // Indice del elemento más pequeño
 
         // Recorre el arreglo y organiza los elementos en torno al pivote
         for (int j = izq; j < der; j++) {
             // Si el elemento actual es menor o igual al pivote
-            if (arreglo[j] <= pivote) {
+            if (arreglo[j].compareTo(pivote) <= 0) {
                 i++;
                 // Intercambia los elementos
                 cambio(arreglo, i, j);
@@ -217,18 +238,19 @@ public class Sorting
      * @param i
      * @param j
      */
-    public static void cambio(int[] arreglo, int i, int j) {
-        int temp = arreglo[i];
+    public static void cambio(Comparable[] arreglo, int i, int j) {
+        Comparable temp = arreglo[i];
         arreglo[i] = arreglo[j];
         arreglo[j] = temp;
     }
+    
     
 
     // Ordenar el arreglo usando el algoritmo de Radix Sort
     /**
      * @param arreglo
      */
-    public static void radixSort(int[] arreglo) {
+    public static void radixSort(Integer[] arreglo) { // Radix sort solo funciona para enteros
         // Loop que crea el array de ordenamiento
         ArrayList<ArrayList<Integer>> radixArray = new ArrayList<ArrayList<Integer>>();
         for (int i = 0; i < 10; i++){
@@ -236,7 +258,7 @@ public class Sorting
         }
 
         // Encontrar el valor máximo del arreglo
-        int valorMax = Arrays.stream(arreglo).max().getAsInt();;
+        int valorMax = Arrays.stream(arreglo).max(Integer::compareTo).orElse(0);
         int exponente = 1;
 
         while (valorMax / exponente > 0) {
@@ -265,8 +287,8 @@ public class Sorting
     /**
      * @param arreglo
      */
-    public static void bucketSort(int[] arreglo) {
-        int max = Arrays.stream(arreglo).max().getAsInt();
+    public static void bucketSort(Integer[] arreglo) { // Bucket sort solo sirve para números reales
+        int max = Arrays.stream(arreglo).max(Integer::compareTo).orElse(0);
         int numBuckets = 10;
         List<Integer>[] buckets = new List[numBuckets];
         for (int i = 0; i < numBuckets; i++) buckets[i] = new ArrayList<>();
