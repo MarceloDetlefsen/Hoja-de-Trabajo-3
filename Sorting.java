@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -12,6 +11,9 @@ import java.util.Scanner;
 
 public class Sorting
 {
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         // Generar los números
         generadorNumeros();
@@ -64,6 +66,9 @@ public class Sorting
     }
 
     // Generar un archivo con cantidadNumeros números aleatorios
+    /**
+     * 
+     */
     public static void generadorNumeros() {
         String nombreArchivo = "numeros.txt";
         int cantidadNumeros = 3000;
@@ -82,6 +87,10 @@ public class Sorting
     }
 
     //Leer los números de un archivo y devolverlos en un arreglo
+    /**
+     * @param nombreArchivo
+     * @return
+     */
     public static int[] leerNumeros(String nombreArchivo) {
         List<Integer> numeros = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(nombreArchivo))) {
@@ -102,6 +111,10 @@ public class Sorting
     }
 
     // Guardar los números en un archivo
+    /**
+     * @param nombreArchivo
+     * @param arreglo
+     */
     public static void guardarNumeros(String nombreArchivo, int[] arreglo) {
         try (FileWriter file = new FileWriter(nombreArchivo)) {
             for (int numero : arreglo) {
@@ -113,6 +126,9 @@ public class Sorting
     }
 
     // Ordenar el arreglo usando el algoritmo de Insertion Sort
+    /**
+     * @param arreglo
+     */
     public static void insertionSort(int[] arreglo) {
         for (int i = 1; i <arreglo.length; i++){
             int key = arreglo[i]; // La variable key toma el valor del elemento que se esta comparando
@@ -126,6 +142,11 @@ public class Sorting
     }
 
     // Ordenar el arreglo usando el algoritmo de Merge Sort
+    /**
+     * @param arreglo
+     * @param izq
+     * @param der
+     */
     public static void mergeSort(int[] arreglo, int izq, int der) {
         if (izq < der) {
             int mitad = (izq + der) / 2;
@@ -136,6 +157,12 @@ public class Sorting
     }
 
     //Método que fusiona los subarrays ordenadamente
+    /**
+     * @param arreglo
+     * @param izq
+     * @param mitad
+     * @param der
+     */
     public static void merge(int[] arreglo, int izq, int mitad, int der) {
         int[] aux = Arrays.copyOfRange(arreglo, izq, der + 1);
         int i = 0, j = mitad - izq + 1, k = izq;
@@ -146,6 +173,11 @@ public class Sorting
     }
 
     // Ordenar el arreglo usando el algoritmo de Quick Sort
+    /**
+     * @param arreglo
+     * @param izq
+     * @param der
+     */
     public static void quickSort(int[] arreglo, int izq, int der) {
         if (izq < der) {
             // Obtiene el índice del pivote
@@ -156,6 +188,12 @@ public class Sorting
         }
     }
 
+    /**
+     * @param arreglo
+     * @param izq
+     * @param der
+     * @return
+     */
     public static int particion(int[] arreglo, int izq, int der) {
         // Selecciona el último elemento como pivote
         int pivote = arreglo[der];
@@ -174,6 +212,11 @@ public class Sorting
         return i + 1; // Devuelve el índice del pivote
     }
 
+    /**
+     * @param arreglo
+     * @param i
+     * @param j
+     */
     public static void cambio(int[] arreglo, int i, int j) {
         int temp = arreglo[i];
         arreglo[i] = arreglo[j];
@@ -182,6 +225,9 @@ public class Sorting
     
 
     // Ordenar el arreglo usando el algoritmo de Radix Sort
+    /**
+     * @param arreglo
+     */
     public static void radixSort(int[] arreglo) {
         // Loop que crea el array de ordenamiento
         ArrayList<ArrayList<Integer>> radixArray = new ArrayList<ArrayList<Integer>>();
@@ -216,6 +262,9 @@ public class Sorting
     }
 
     // Ordenar el arreglo usando el algoritmo de Bucket Sort
+    /**
+     * @param arreglo
+     */
     public static void bucketSort(int[] arreglo) {
         int max = Arrays.stream(arreglo).max().getAsInt();
         int numBuckets = 10;
