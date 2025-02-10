@@ -37,7 +37,7 @@ public class Sorting
         // Ordenar dependiendo de la opción seleccionada
         switch (opcion) {
             case 1:
-                break;
+                insertionSort(numeros);
             case 2:
                 mergeSort(numeros, 0, numeros.length - 1);
                 break;
@@ -114,7 +114,15 @@ public class Sorting
 
     // Ordenar el arreglo usando el algoritmo de Insertion Sort
     public static void insertionSort(int[] arreglo) {
-        
+        for (int i = 1; i <arreglo.length; i++){
+            int key = arreglo[i]; // La variable key toma el valor del elemento que se esta comparando
+            int j = i - 1; // la variable j se usa para evaluar los elementos de la lista atras de Key
+            while (j >=0 && arreglo[j] > key){
+                arreglo[j + 1] = arreglo[j];
+                j--;
+            }
+            arreglo[j + 1] = key;
+        }
     }
 
     // Ordenar el arreglo usando el algoritmo de Merge Sort
