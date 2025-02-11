@@ -1,0 +1,3 @@
+Sorting.java es el programa principal: Este solicita ingresar un número dentro de los recomendados (10, 100, 1000, y 3000), este valor representa la cantidad de números que se generan en un docuemnto txt, los números pueden ser entre 1-10000. Posteriormente están las 5 opciones a elegir para decidir con que tipo de sorting se ordenan estos números. Una vez escogida la opción este ordena los valores y los guarda en un nuevo archivo .txt, y vuelve a ordenarlos una segunda vez.
+
+Prueba.java realiza el mismo proceso pero con las opciones de valores recomendadas, y para los 5 algoritmos de sorting a la vez. Esto se hizo con el objetivo de simplificar la recolección de datos para evaluar los algoritmos.
