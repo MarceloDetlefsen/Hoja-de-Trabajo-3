@@ -28,7 +28,7 @@ public class Sorting
      */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Ingrese la cantidad de números a generar: 10, 100, 1000, o 3000");
+        System.out.print("Ingrese la cantidad de números a generar (10, 100, 1000, o 3000): \n");
         int cantidadNumeros = scanner.nextInt();
         generadorNumeros(cantidadNumeros);
         
