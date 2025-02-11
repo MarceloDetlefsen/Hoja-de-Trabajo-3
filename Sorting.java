@@ -9,24 +9,31 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * Universidad del Valle de Guatemala
+ * Algoritmos y Estructuras de datos
+ * Ing. Douglas Barrios
+ * Colaboradores: 
+ * Marcelo Detlefsen - 24554
+ * Luis Pedro Figueroa - 24087
+ * Luis Pedro Hernández - 24337
+ * Fecha: 10/02/2025
+ * Descripción: Clase que genera números aleatorios, los lee de un archivo, los ordena y los guarda en otro archivo.
+ */
+
 public class Sorting
 {
     /**
      * @param args
      */
     public static void main(String[] args) {
-        // Generar los números
         generadorNumeros();
-        
-        // Leer los números del archivo
         String archivo = "numeros.txt";
         int[] numeros = leerNumeros(archivo);
         
-        // Imprimir los números desordenados
         System.out.println("Números desordenados:");
         System.out.println(Arrays.toString(numeros));
         
-        // Menú para seleccionar el algoritmo de ordenamiento
         Scanner scanner = new Scanner(System.in);
         System.out.println("\nSelecciona el método de ordenamiento:");
         System.out.println("1. InsertionSort");
@@ -36,10 +43,27 @@ public class Sorting
         System.out.println("5. BucketSort");
         int opcion = scanner.nextInt();
         
-        // Ordenar dependiendo de la opción seleccionada
+        ordenar(opcion, numeros);
+        System.out.println("\nNúmeros ordenados:");
+        System.out.println(Arrays.toString(numeros));
+        
+        guardarNumeros("numeros_ordenados.txt", numeros);
+        
+        // Leer nuevamente los números ordenados
+        numeros = leerNumeros("numeros_ordenados.txt");
+        
+        ordenar(opcion, numeros);
+        System.out.println("\nNúmeros ordenados nuevamente:");
+        System.out.println(Arrays.toString(numeros));
+        
+        guardarNumeros("numeros_ordenados_nuevamente.txt", numeros);
+    }
+    
+    public static void ordenar(int opcion, int[] numeros) {
         switch (opcion) {
             case 1:
                 insertionSort(numeros);
+                break;
             case 2:
                 mergeSort(numeros, 0, numeros.length - 1);
                 break;
@@ -54,15 +78,8 @@ public class Sorting
                 break;
             default:
                 System.out.println("Opción no válida.");
-                break;
+                return;
         }
-        
-        // Imprimir los números ordenados
-        System.out.println("\nNúmeros ordenados:");
-        System.out.println(Arrays.toString(numeros));
-        
-        // Guardar los números ordenados en un archivo
-        guardarNumeros("numeros_ordenados.txt", numeros);
     }
 
     // Generar un archivo con cantidadNumeros números aleatorios
