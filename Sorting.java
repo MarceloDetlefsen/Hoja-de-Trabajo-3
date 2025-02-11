@@ -27,14 +27,17 @@ public class Sorting
      * @param args
      */
     public static void main(String[] args) {
-        generadorNumeros();
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Ingrese la cantidad de números a generar: 10, 100, 1000, o 3000");
+        int cantidadNumeros = scanner.nextInt();
+        generadorNumeros(cantidadNumeros);
+        
         String archivo = "numeros.txt";
         int[] numeros = leerNumeros(archivo);
         
         System.out.println("Números desordenados:");
         System.out.println(Arrays.toString(numeros));
         
-        Scanner scanner = new Scanner(System.in);
         System.out.println("\nSelecciona el método de ordenamiento:");
         System.out.println("1. InsertionSort");
         System.out.println("2. MergeSort");
@@ -59,6 +62,11 @@ public class Sorting
         guardarNumeros("numeros_ordenados_nuevamente.txt", numeros);
     }
     
+    // Ordenar los números según la opción seleccionada
+    /**
+     * @param opcion
+     * @param numeros
+     */
     public static void ordenar(int opcion, int[] numeros) {
         switch (opcion) {
             case 1:
@@ -84,11 +92,10 @@ public class Sorting
 
     // Generar un archivo con cantidadNumeros números aleatorios
     /**
-     * 
+     * @param cantidadNumeros
      */
-    public static void generadorNumeros() {
+    public static void generadorNumeros(int cantidadNumeros) {
         String nombreArchivo = "numeros.txt";
-        int cantidadNumeros = 3000;
         Random random = new Random();
 
         try (FileWriter file = new FileWriter(nombreArchivo)) {
@@ -103,10 +110,10 @@ public class Sorting
         }
     }
 
-    //Leer los números de un archivo y devolverlos en un arreglo
+    // Leer los números de un archivo y devolverlos en un arreglo
     /**
      * @param nombreArchivo
-     * @return
+     * @return arreglo
      */
     public static int[] leerNumeros(String nombreArchivo) {
         List<Integer> numeros = new ArrayList<>();
@@ -285,7 +292,8 @@ public class Sorting
     public static void bucketSort(int[] arreglo) {
         int max = Arrays.stream(arreglo).max().getAsInt();
         int numBuckets = 10;
-        List<Integer>[] buckets = new List[numBuckets];
+        @SuppressWarnings("unchecked")
+        List<Integer>[] buckets = (List<Integer>[]) new ArrayList[numBuckets];
         for (int i = 0; i < numBuckets; i++) buckets[i] = new ArrayList<>();
         for (int num : arreglo) buckets[(num * numBuckets) / (max + 1)].add(num);
         int idx = 0;
