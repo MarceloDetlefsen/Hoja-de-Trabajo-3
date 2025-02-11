@@ -67,7 +67,7 @@ public class Sorting
      * @param opcion
      * @param numeros
      */
-    public static void ordenar(int opcion, int[] numeros) {
+    public static void ordenar(int opcion, Comparable[] numeros) {
         switch (opcion) {
             case 1:
                 insertionSort(numeros);
