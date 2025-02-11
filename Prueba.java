@@ -18,110 +18,60 @@ import java.util.Scanner;
  * Luis Pedro Figueroa - 24087
  * Luis Pedro Hernández - 24337
  * Fecha: 10/02/2025
- * Descripción: Clase que genera números aleatorios, los lee de un archivo, los ordena y los guarda en otro archivo.
+ * Descripción: Clase que ejecuta todos los sortings 2 veces de manera corrida, y es la forma más correcta testear el tiempo de ejecución con el Profiler.
  */
 
-public class Sorting
+public class Prueba
 {
     /**
      * @param args
      */
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Ingrese la cantidad de números a generar (10, 100, 1000, o 3000): \n");
-        int cantidadNumeros = scanner.nextInt();
-        generadorNumeros(cantidadNumeros);
+        int[] tamanos = {10, 100, 1000, 3000};
         
-        String archivo = "numeros.txt";
-        Comparable[] numeros = leerNumeros(archivo);
-        
-        System.out.println("Números desordenados:");
-        System.out.println(Arrays.toString(numeros));
-        
-        System.out.println("\nSelecciona el método de ordenamiento:");
-        System.out.println("1. InsertionSort");
-        System.out.println("2. MergeSort");
-        System.out.println("3. QuickSort");
-        System.out.println("4. RadixSort");
-        System.out.println("5. BucketSort");
-        int opcion = scanner.nextInt();
-        
-        ordenar(opcion, numeros);
-        System.out.println("\nNúmeros ordenados:");
-        System.out.println(Arrays.toString(numeros));
-        
-        guardarNumeros("numeros_ordenados.txt", numeros);
-        
-        // Leer nuevamente los números ordenados
-        numeros = leerNumeros("numeros_ordenados.txt");
-        
-        ordenar(opcion, numeros);
-        System.out.println("\nNúmeros ordenados nuevamente:");
-        System.out.println(Arrays.toString(numeros));
-        
-        guardarNumeros("numeros_ordenados_nuevamente.txt", numeros);
-    }
-    
-    // Ordenar los números según la opción seleccionada
-    /**
-     * @param opcion
-     * @param numeros
-     */
-    public static void ordenar(int opcion, int[] numeros) {
-        switch (opcion) {
-            case 1:
-                insertionSort(numeros);
-                break;
-            case 2:
-                mergeSort(numeros, 0, numeros.length - 1);
-                break;
-            case 3:
-                quickSort(numeros, 0, numeros.length - 1);
-                break;
-            case 4:
-                // Convertir Comparable[] a Integer[] para radixSort
-                Integer[] numerosInteger = Arrays.copyOf(numeros, numeros.length, Integer[].class);
-                radixSort(numerosInteger);
-                numeros = Arrays.copyOf(numerosInteger, numerosInteger.length, Comparable[].class);
-                break;
-            case 5:
-                // Convertir Comparable[] a Integer[] para bucketSort
-                Integer[] numerosInteger2 = Arrays.copyOf(numeros, numeros.length, Integer[].class);
-                bucketSort(numerosInteger2);
-                numeros = Arrays.copyOf(numerosInteger2, numerosInteger2.length, Comparable[].class);
-                break;
-            default:
-                System.out.println("Opción no válida.");
-                return;
+        for (int tamano : tamanos) {
+            System.out.println("\nEjecutando con tamaño: " + tamano);
+            ejecutarSorting(tamano, "InsertionSort");
+            ejecutarSorting(tamano, "MergeSort");
+            ejecutarSorting(tamano, "QuickSort");
+            ejecutarSorting(tamano, "RadixSort");
+            ejecutarSorting(tamano, "BucketSort");
         }
+    }
+
+    public static void ejecutarSorting(int tamano, String metodo) {
+        String archivo = "numeros_" + tamano + ".txt";
+        generadorNumeros(archivo, tamano);
+        int[] numeros = leerNumeros(archivo);
+        System.out.println("\nEjecutando " + metodo + " con lista desordenada.");
+        aplicarSorting(numeros, metodo);
+        guardarNumeros("numeros_ordenados_" + tamano + "_" + metodo + ".txt", numeros);
+        System.out.println("Ejecutando " + metodo + " con lista ya ordenada.");
+        aplicarSorting(numeros, metodo);
     }
 
     // Generar un archivo con cantidadNumeros números aleatorios
     /**
-     * @param cantidadNumeros
+     * 
      */
-    public static void generadorNumeros(int cantidadNumeros) {
-        String nombreArchivo = "numeros.txt";
+    public static void generadorNumeros(String nombreArchivo, int cantidadNumeros) {
         Random random = new Random();
-
         try (FileWriter file = new FileWriter(nombreArchivo)) {
             for (int i = 0; i < cantidadNumeros; i++) {
                 int numero = random.nextInt(10000);
                 file.write(numero + "\n");
             }
-            System.out.println("Se han generado " + cantidadNumeros + " números aleatorios en el archivo " + nombreArchivo);
-        } 
-        catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("Error al escribir en el archivo " + nombreArchivo);
         }
     }
 
-    // Leer los números de un archivo y devolverlos en un arreglo
+    //Leer los números de un archivo y devolverlos en un arreglo
     /**
      * @param nombreArchivo
-     * @return arreglo
+     * @return
      */
-    public static Integer[] leerNumeros(String nombreArchivo) {
+    public static int[] leerNumeros(String nombreArchivo) {
         List<Integer> numeros = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(nombreArchivo))) {
             String linea;
@@ -133,7 +83,7 @@ public class Sorting
             System.out.println("Error al leer el archivo " + nombreArchivo);
         }
 
-        Integer[] arreglo = new Integer[numeros.size()];
+        int[] arreglo = new int[numeros.size()];
         for (int i = 0; i < numeros.size(); i++) {
             arreglo[i] = numeros.get(i);
         }
@@ -145,9 +95,9 @@ public class Sorting
      * @param nombreArchivo
      * @param arreglo
      */
-    public static void guardarNumeros(String nombreArchivo, Comparable[] arreglo) {
+    public static void guardarNumeros(String nombreArchivo, int[] arreglo) {
         try (FileWriter file = new FileWriter(nombreArchivo)) {
-            for (Comparable numero : arreglo) {
+            for (int numero : arreglo) {
                 file.write(numero + "\n");
             }
         } catch (IOException e) {
@@ -155,15 +105,35 @@ public class Sorting
         }
     }
 
+    public static void aplicarSorting(int[] numeros, String metodo) {
+        switch (metodo) {
+            case "InsertionSort":
+                insertionSort(numeros);
+                break;
+            case "MergeSort":
+                mergeSort(numeros, 0, numeros.length - 1);
+                break;
+            case "QuickSort":
+                quickSort(numeros, 0, numeros.length - 1);
+                break;
+            case "RadixSort":
+                radixSort(numeros);
+                break;
+            case "BucketSort":
+                bucketSort(numeros);
+                break;
+        }
+    }
+
     // Ordenar el arreglo usando el algoritmo de Insertion Sort
     /**
      * @param arreglo
      */
-    public static void insertionSort(Comparable[] arreglo) {
+    public static void insertionSort(int[] arreglo) {
         for (int i = 1; i <arreglo.length; i++){
-            Comparable key = arreglo[i]; // La variable key toma el valor del elemento que se esta comparando
+            int key = arreglo[i]; // La variable key toma el valor del elemento que se esta comparando
             int j = i - 1; // la variable j se usa para evaluar los elementos de la lista atras de Key
-            while (j >= 0 && arreglo[j].compareTo(key) > 0){
+            while (j >=0 && arreglo[j] > key){
                 arreglo[j + 1] = arreglo[j];
                 j--;
             }
@@ -177,7 +147,7 @@ public class Sorting
      * @param izq
      * @param der
      */
-    public static void mergeSort(Comparable[] arreglo, int izq, int der) {
+    public static void mergeSort(int[] arreglo, int izq, int der) {
         if (izq < der) {
             int mitad = (izq + der) / 2;
             mergeSort(arreglo, izq, mitad);
@@ -193,27 +163,13 @@ public class Sorting
      * @param mitad
      * @param der
      */
-    public static void merge(Comparable[] arreglo, int izq, int mitad, int der) {
-        // Copia los elementos del rango especificado en un arreglo auxiliar
-        Comparable[] aux = Arrays.copyOfRange(arreglo, izq, der + 1);
-    
-        int i = 0; // Índice para la primera mitad del arreglo auxiliar
-        int j = mitad - izq + 1; // Índice para la segunda mitad del arreglo auxiliar
-        int k = izq; // Índice para el arreglo original
-    
-        // Combina las dos mitades en el arreglo original
+    public static void merge(int[] arreglo, int izq, int mitad, int der) {
+        int[] aux = Arrays.copyOfRange(arreglo, izq, der + 1);
+        int i = 0, j = mitad - izq + 1, k = izq;
         while (i <= mitad - izq && j < aux.length) {
-            if (aux[i].compareTo(aux[j]) <= 0) {
-                arreglo[k++] = aux[i++];
-            } else {
-                arreglo[k++] = aux[j++];
-            }
+            arreglo[k++] = (aux[i] <= aux[j]) ? aux[i++] : aux[j++];
         }
-    
-        // Copia los elementos restantes de la primera mitad, si los hay
-        while (i <= mitad - izq) {
-            arreglo[k++] = aux[i++];
-        }
+        while (i <= mitad - izq) arreglo[k++] = aux[i++];
     }
 
     // Ordenar el arreglo usando el algoritmo de Quick Sort
@@ -222,7 +178,7 @@ public class Sorting
      * @param izq
      * @param der
      */
-    public static void quickSort(Comparable[] arreglo, int izq, int der) {
+    public static void quickSort(int[] arreglo, int izq, int der) {
         if (izq < der) {
             // Obtiene el índice del pivote
             int pivote = particion(arreglo, izq, der);
@@ -238,15 +194,15 @@ public class Sorting
      * @param der
      * @return
      */
-    public static int particion(Comparable[] arreglo, int izq, int der) {
+    public static int particion(int[] arreglo, int izq, int der) {
         // Selecciona el último elemento como pivote
-        Comparable pivote = arreglo[der];
+        int pivote = arreglo[der];
         int i = izq - 1; // Indice del elemento más pequeño
 
         // Recorre el arreglo y organiza los elementos en torno al pivote
         for (int j = izq; j < der; j++) {
             // Si el elemento actual es menor o igual al pivote
-            if (arreglo[j].compareTo(pivote) <= 0) {
+            if (arreglo[j] <= pivote) {
                 i++;
                 // Intercambia los elementos
                 cambio(arreglo, i, j);
@@ -261,19 +217,18 @@ public class Sorting
      * @param i
      * @param j
      */
-    public static void cambio(Comparable[] arreglo, int i, int j) {
-        Comparable temp = arreglo[i];
+    public static void cambio(int[] arreglo, int i, int j) {
+        int temp = arreglo[i];
         arreglo[i] = arreglo[j];
         arreglo[j] = temp;
     }
-    
     
 
     // Ordenar el arreglo usando el algoritmo de Radix Sort
     /**
      * @param arreglo
      */
-    public static void radixSort(Integer[] arreglo) { // Radix sort solo funciona para enteros
+    public static void radixSort(int[] arreglo) {
         // Loop que crea el array de ordenamiento
         ArrayList<ArrayList<Integer>> radixArray = new ArrayList<ArrayList<Integer>>();
         for (int i = 0; i < 10; i++){
@@ -281,7 +236,7 @@ public class Sorting
         }
 
         // Encontrar el valor máximo del arreglo
-        int valorMax = Arrays.stream(arreglo).max(Integer::compareTo).orElse(0);
+        int valorMax = Arrays.stream(arreglo).max().getAsInt();;
         int exponente = 1;
 
         while (valorMax / exponente > 0) {
@@ -310,11 +265,10 @@ public class Sorting
     /**
      * @param arreglo
      */
-    public static void bucketSort(Integer[] arreglo) { // Bucket sort solo sirve para números reales
-        int max = Arrays.stream(arreglo).max(Integer::compareTo).orElse(0);
+    public static void bucketSort(int[] arreglo) {
+        int max = Arrays.stream(arreglo).max().getAsInt();
         int numBuckets = 10;
-        @SuppressWarnings("unchecked")
-        List<Integer>[] buckets = (List<Integer>[]) new ArrayList[numBuckets];
+        List<Integer>[] buckets = new List[numBuckets];
         for (int i = 0; i < numBuckets; i++) buckets[i] = new ArrayList<>();
         for (int num : arreglo) buckets[(num * numBuckets) / (max + 1)].add(num);
         int idx = 0;
