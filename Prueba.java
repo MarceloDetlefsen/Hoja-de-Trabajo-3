@@ -27,71 +27,41 @@ public class Prueba
      * @param args
      */
     public static void main(String[] args) {
-        ejecutarOrdenamientos();
+        int[] tamanos = {10, 100, 1000, 3000};
+        
+        for (int tamano : tamanos) {
+            System.out.println("\nEjecutando con tamaño: " + tamano);
+            ejecutarSorting(tamano, "InsertionSort");
+            ejecutarSorting(tamano, "MergeSort");
+            ejecutarSorting(tamano, "QuickSort");
+            ejecutarSorting(tamano, "RadixSort");
+            ejecutarSorting(tamano, "BucketSort");
+        }
     }
 
-    public static void ejecutarOrdenamientos() {
-        int[] numeros;
-        
-        // Insertion Sort
-        generadorNumeros();
-        numeros = leerNumeros("numeros.txt");
-        insertionSort(numeros);
-        guardarNumeros("numeros_ordenados_insertion.txt", numeros);
-        insertionSort(numeros);
-        guardarNumeros("numeros_ordenados_insertion_nuevamente.txt", numeros);
-        
-        // Merge Sort
-        generadorNumeros();
-        numeros = leerNumeros("numeros.txt");
-        mergeSort(numeros, 0, numeros.length - 1);
-        guardarNumeros("numeros_ordenados_merge.txt", numeros);
-        mergeSort(numeros, 0, numeros.length - 1);
-        guardarNumeros("numeros_ordenados_merge_nuevamente.txt", numeros);
-        
-        // Quick Sort
-        generadorNumeros();
-        numeros = leerNumeros("numeros.txt");
-        quickSort(numeros, 0, numeros.length - 1);
-        guardarNumeros("numeros_ordenados_quick.txt", numeros);
-        quickSort(numeros, 0, numeros.length - 1);
-        guardarNumeros("numeros_ordenados_quick_nuevamente.txt", numeros);
-        
-        // Radix Sort
-        generadorNumeros();
-        numeros = leerNumeros("numeros.txt");
-        radixSort(numeros);
-        guardarNumeros("numeros_ordenados_radix.txt", numeros);
-        radixSort(numeros);
-        guardarNumeros("numeros_ordenados_radix_nuevamente.txt", numeros);
-        
-        // Bucket Sort
-        generadorNumeros();
-        numeros = leerNumeros("numeros.txt");
-        bucketSort(numeros);
-        guardarNumeros("numeros_ordenados_bucket.txt", numeros);
-        bucketSort(numeros);
-        guardarNumeros("numeros_ordenados_bucket_nuevamente.txt", numeros);
+    public static void ejecutarSorting(int tamano, String metodo) {
+        String archivo = "numeros_" + tamano + ".txt";
+        generadorNumeros(archivo, tamano);
+        int[] numeros = leerNumeros(archivo);
+        System.out.println("\nEjecutando " + metodo + " con lista desordenada.");
+        aplicarSorting(numeros, metodo);
+        guardarNumeros("numeros_ordenados_" + tamano + "_" + metodo + ".txt", numeros);
+        System.out.println("Ejecutando " + metodo + " con lista ya ordenada.");
+        aplicarSorting(numeros, metodo);
     }
-
 
     // Generar un archivo con cantidadNumeros números aleatorios
     /**
      * 
      */
-    public static void generadorNumeros() {
-        String nombreArchivo = "numeros.txt";
-        int cantidadNumeros = 3000;
+    public static void generadorNumeros(String nombreArchivo, int cantidadNumeros) {
         Random random = new Random();
-
         try (FileWriter file = new FileWriter(nombreArchivo)) {
             for (int i = 0; i < cantidadNumeros; i++) {
                 int numero = random.nextInt(10000);
                 file.write(numero + "\n");
             }
-            System.out.println("Se han generado " + cantidadNumeros + " números aleatorios en el archivo " + nombreArchivo);
-        } 
-        catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("Error al escribir en el archivo " + nombreArchivo);
         }
     }
@@ -132,6 +102,26 @@ public class Prueba
             }
         } catch (IOException e) {
             System.out.println("Error al escribir en el archivo " + nombreArchivo);
+        }
+    }
+
+    public static void aplicarSorting(int[] numeros, String metodo) {
+        switch (metodo) {
+            case "InsertionSort":
+                insertionSort(numeros);
+                break;
+            case "MergeSort":
+                mergeSort(numeros, 0, numeros.length - 1);
+                break;
+            case "QuickSort":
+                quickSort(numeros, 0, numeros.length - 1);
+                break;
+            case "RadixSort":
+                radixSort(numeros);
+                break;
+            case "BucketSort":
+                bucketSort(numeros);
+                break;
         }
     }
 
